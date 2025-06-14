@@ -1,0 +1,54 @@
+<!-- templates/create_delivery.html -->
+{% extends "base.html" %}
+
+{% block title %}Create Delivery - QuickDeliver Lite{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-plus"></i> Create New Delivery Request
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="pickup_address" class="form-label">
+                            <i class="fas fa-map-marker-alt text-success"></i> Pickup Address
+                        </label>
+                        <textarea class="form-control" id="pickup_address" name="pickup_address" rows="2" required 
+                                  placeholder="Enter the full pickup address"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="dropoff_address" class="form-label">
+                            <i class="fas fa-flag-checkered text-danger"></i> Dropoff Address
+                        </label>
+                        <textarea class="form-control" id="dropoff_address" name="dropoff_address" rows="2" required 
+                                  placeholder="Enter the full dropoff address"></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="package_note" class="form-label">
+                            <i class="fas fa-box"></i> Package Description
+                        </label>
+                        <textarea class="form-control" id="package_note" name="package_note" rows="3" required 
+                                  placeholder="Describe the package (size, weight, special instructions, etc.)"></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary me-md-2">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Create Delivery Request
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

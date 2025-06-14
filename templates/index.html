@@ -1,0 +1,49 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto text-center">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-truck text-primary"></i> 
+            Welcome to QuickDeliver Lite
+        </h1>
+        <p class="lead mb-4">
+            Fast, reliable delivery management system connecting customers with drivers.
+        </p>
+        
+        {% if not session.user_id %}
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user fa-3x text-primary mb-3"></i>
+                        <h4>Customers</h4>
+                        <p>Create delivery requests and track your packages in real-time.</p>
+                        <a href="{{ url_for('register') }}" class="btn btn-primary">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-car fa-3x text-success mb-3"></i>
+                        <h4>Drivers</h4>
+                        <p>Find delivery opportunities and earn money on your schedule.</p>
+                        <a href="{{ url_for('register') }}" class="btn btn-success">Join as Driver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Sign in here</a></p>
+        </div>
+        {% else %}
+        <div class="mt-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

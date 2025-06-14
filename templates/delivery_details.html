@@ -1,0 +1,94 @@
+<!-- templates/delivery_details.html -->
+{% extends "base.html" %}
+
+{% block title %}Delivery Details - QuickDeliver Lite{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0">
+                    <i class="fas fa-info-circle"></i> Delivery Details
+                </h3>
+                <span class="badge bg-{{ 'warning' if delivery.status == 'Pending' else 'info' if delivery.status == 'Accepted' else 'success' }} fs-6">
+                    {{ delivery.status }}
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="fas fa-user"></i> Customer Information</h5>
+                        <p><strong>Name:</strong> {{ delivery.customer_name }}</p>
+                        <p><strong>Request ID:</strong> {{ delivery.id[:8] }}...</p>
+                        <p><strong>Created:</strong> {{ delivery.created_at[:16] }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        {% if delivery.driver_name %}
+                        <h5><i class="fas fa-car"></i> Driver Information</h5>
+                        <p><strong>Driver:</strong> {{ delivery.driver_name }}</p>
+                        {% if delivery.accepted_at %}
+                        <p><strong>Accepted:</strong> {{ delivery.accepted_at[:16] }}</p>
+                        {% endif %}
+                        {% if delivery.completed_at %}
+                        <p><strong>Completed:</strong> {{ delivery.completed_at[:16] }}</p>
+                        {% endif %}
+                        {% else %}
+                        <h5><i class="fas fa-clock"></i> Status</h5>
+                        <p>Waiting for driver assignment</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h5><i class="fas fa-route"></i> Delivery Route</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="text-success">
+                                <i class="fas fa-map-marker-alt"></i> Pickup Address
+                            </h6>
+                            <p>{{ delivery.pickup_address }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="text-danger">
+                                <i class="fas fa-flag-checkered"></i> Dropoff Address
+                            </h6>
+                            <p>{{ delivery.dropoff_address }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h5><i class="fas fa-box"></i> Package Information</h5>
+                <div class="border rounded p-3 mb-3">
+                    <p>{{ delivery.package_note }}</p>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                
+                {% if session.user_role == 'driver' %}
+                    {% if delivery.status == 'Pending' %}
+                    <a href="{{ url_for('accept_delivery', delivery_id=delivery.id) }}" 
+                       class="btn btn-success"
+                       onclick="return confirm('Accept this delivery?')">
+                        <i class="fas fa-check"></i> Accept Delivery
+                    </a>
+                    {% elif delivery.status == 'Accepted' and delivery.driver_id == session.user_id %}
+                    <a href="{{ url_for('complete_delivery', delivery_id=delivery.id) }}" 
+                       class="btn btn-success"
+                       onclick="return confirm('Mark this delivery as completed?')">
+                        <i class="fas fa-check-circle"></i> Mark as Completed
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
