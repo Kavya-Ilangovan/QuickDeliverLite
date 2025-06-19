@@ -6,7 +6,7 @@ from datetime import datetime
 import uuid
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-this-in-production'
+app.secret_key = 'secret'
 
 # Data storage files
 USERS_FILE = 'data/users.json'
