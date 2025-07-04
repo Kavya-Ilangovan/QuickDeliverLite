@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Completed Deliveries</h2>
+
+{% if deliveries %}
+<ul class="list-group">
+{% for delivery in deliveries %}
+    <li class="list-group-item">
+        <strong>ID:</strong> {{ delivery.id }}<br>
+        <strong>Status:</strong>
+        <span class="badge bg-success">Delivered</span><br>
+
+        {% if delivery.get('feedback') %}
+            <p class="mt-2 mb-0">Rated: {{ delivery.feedback.rating }} / 5</p>
+            <small class="text-muted">"{{ delivery.feedback.comment }}"</small>
+        {% else %}
+            <p class="mt-2 text-muted">No feedback yet.</p>
+        {% endif %}
+
+        <p class="mt-2"><strong>Pickup:</strong> {{ delivery.pickup_address }}<br>
+        <strong>Dropoff:</strong> {{ delivery.dropoff_address }}</p>
+    </li>
+{% endfor %}
+</ul>
+{% else %}
+<p class="text-muted">You have not completed any deliveries yet.</p>
+{% endif %}
+
+{% endblock %}

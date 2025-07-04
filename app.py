@@ -205,6 +205,23 @@ def dashboard():
     
     return render_template('dashboard.html')
 
+@app.route('/profile')
+@login_required
+def profile():
+    deliveries = load_deliveries()
+
+    if session['user_role'] == 'customer':
+        my_deliveries = [d for d in deliveries.values() if d['customer_id'] == session['user_id']]
+        return render_template('customer_profile.html', deliveries=my_deliveries)
+
+    elif session['user_role'] == 'driver':
+        my_deliveries = [d for d in deliveries.values() if d.get('driver_id') == session['user_id'] and d['status'] == 'Delivered']
+        return render_template('driver_profile.html', deliveries=my_deliveries)
+
+    else:
+        flash("Unknown role.", "danger")
+        return redirect(url_for('logout'))
+
 @app.route('/create_delivery', methods=['GET', 'POST'])
 @customer_required
 def create_delivery():
@@ -289,29 +306,53 @@ def accept_delivery(delivery_id):
 @app.route('/complete_delivery/<delivery_id>')
 @driver_required
 def complete_delivery(delivery_id):
-    """Mark delivery as completed (drivers only)"""
     deliveries = load_deliveries()
-    
+
     if delivery_id not in deliveries:
         flash('Delivery not found.', 'error')
         return redirect(url_for('dashboard'))
-    
+
     delivery = deliveries[delivery_id]
-    
+
     if delivery.get('driver_id') != session['user_id']:
         flash('You can only complete your own deliveries.', 'error')
         return redirect(url_for('dashboard'))
-    
-    if delivery['status'] != 'Accepted':
-        flash('This delivery cannot be completed.', 'error')
+
+    if delivery['status'] != 'In Transit':
+        flash('This delivery cannot be marked as delivered yet.', 'error')
         return redirect(url_for('dashboard'))
-    
-    # Mark as completed
-    delivery['status'] = 'Completed'
+
+    # Mark as delivered
+    delivery['status'] = 'Delivered'
     delivery['completed_at'] = datetime.now().isoformat()
-    
+
     save_deliveries(deliveries)
-    flash('Delivery marked as completed!', 'success')
+    flash('Delivery marked as delivered!', 'success')
+    return redirect(url_for('dashboard'))
+
+@app.route('/mark_in_transit/<delivery_id>')
+@driver_required
+def mark_in_transit(delivery_id):
+    deliveries = load_deliveries()
+
+    if delivery_id not in deliveries:
+        flash('Delivery not found.', 'error')
+        return redirect(url_for('dashboard'))
+
+    delivery = deliveries[delivery_id]
+
+    if delivery.get('driver_id') != session['user_id']:
+        flash('You can only update your own deliveries.', 'error')
+        return redirect(url_for('dashboard'))
+
+    if delivery['status'] != 'Accepted':
+        flash('This delivery cannot be marked as in transit.', 'error')
+        return redirect(url_for('dashboard'))
+
+    delivery['status'] = 'In Transit'
+
+    save_deliveries(deliveries)
+    flash('Delivery status updated to In Transit.', 'success')
     return redirect(url_for('dashboard'))
 
 @app.route('/delivery_details/<delivery_id>')
@@ -366,6 +407,44 @@ def api_delivery_status():
                 })
     
     return jsonify(result)
+
+@app.route('/submit_feedback/<delivery_id>', methods=['GET', 'POST'])
+@login_required
+def submit_feedback(delivery_id):
+    deliveries = load_deliveries()
+    delivery = deliveries.get(delivery_id)
+
+    if not delivery:
+        flash("Delivery not found.", "danger")
+        return redirect(url_for('profile'))
+
+    if delivery['customer_id'] != session['user_id']:
+        flash("Unauthorized access.", "danger")
+        return redirect(url_for('profile'))
+
+    if delivery.get('feedback'):
+        flash("Feedback already submitted.", "warning")
+        return redirect(url_for('profile'))
+
+    if delivery['status'] != 'Delivered':
+        flash("Feedback can only be submitted after delivery.", "danger")
+        return redirect(url_for('profile'))
+
+    if request.method == 'POST':
+        rating = int(request.form.get('rating'))
+        comment = request.form.get('comment', '')[:200]
+
+        if rating < 1 or rating > 5:
+            flash("Rating must be between 1 and 5.", "danger")
+            return redirect(request.url)
+
+        delivery['feedback'] = {'rating': rating, 'comment': comment}
+        save_deliveries(deliveries)
+
+        flash("Thank you for your feedback!", "success")
+        return redirect(url_for('profile'))
+
+    return render_template('submit_feedback.html', delivery=delivery)
 
 if __name__ == '__main__':
     ensure_data_directory()

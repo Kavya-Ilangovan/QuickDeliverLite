@@ -1,0 +1,34 @@
+{
+  "k@email.com": {
+    "id": "6b06e6d4-4210-4430-b575-b91b56cec754",
+    "name": "cc",
+    "email": "cc@email.com",
+    "password": "scrypt:32768:8:1$MAxAYDZKoIhcaUGH$5d6bf74060fee897795fa12ee8236d0957b3523b5c3bd3fe43b5d48cbc4a266a639b95474fa35b0cdd829e79da135ce7dece0618dda5824c361679c45503c782",
+    "user_type": "customer",
+    "created_at": "2025-06-19T16:05:42.004252"
+  },
+  "z@email.com": {
+    "id": "22376823-e7f2-4c5e-bd92-b15d06c6f7cc",
+    "name": "dd",
+    "email": "dd@email.com",
+    "password": "scrypt:32768:8:1$v23iCRDZa96pvkLH$af5aad8c5601d086538a314f135e843897dc66f8f075851c108518b526cd9749673e74763c8c7b2cbe8161a5097ea01ced4b1faf816ab0a1f172cf786f368f50",
+    "user_type": "driver",
+    "created_at": "2025-06-19T16:07:25.253459"
+  },
+  "c@gmail.com": {
+    "id": "0cf5fa4e-b21d-428e-a135-853e3c6dadd6",
+    "name": "c",
+    "email": "c@gmail.com",
+    "password": "scrypt:32768:8:1$se2JxiYRXaCnv2nQ$d9b1490cc9028bcb8f4c4720e96a5c84f6817f461c55b1732195bf048521349ebf42674e2168008fbf96cc9f53d450d876db44b9dc146426b735c9e7962231fc",
+    "user_type": "customer",
+    "created_at": "2025-07-05T02:39:09.131900"
+  },
+  "d@gmail.com": {
+    "id": "3d2df403-6db5-4fe8-bc19-4b7616ea3929",
+    "name": "d",
+    "email": "d@gmail.com",
+    "password": "scrypt:32768:8:1$eEiebmGZ2yLj3uLZ$a29e44af7df30db21fd5bf2e4c8449dd7cca889ae6daeacc1053a0ce97b21fcae72de44a7e491e599d065173c9ca6ac7ed258d52fa1a022690256658a1185277",
+    "user_type": "driver",
+    "created_at": "2025-07-05T04:34:55.014332"
+  }
+}

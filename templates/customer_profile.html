@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="mb-4">Your Deliveries</h2>
+
+{% if deliveries %}
+<ul class="list-group">
+{% for delivery in deliveries %}
+    <li class="list-group-item">
+        <strong>ID:</strong> {{ delivery.id }}<br>
+        <strong>Status:</strong>
+        <span class="badge
+            {% if delivery.status == 'Pending' %} bg-secondary
+            {% elif delivery.status == 'Accepted' %} bg-primary
+            {% elif delivery.status == 'In Transit' %} bg-warning text-dark
+            {% elif delivery.status == 'Delivered' %} bg-success
+            {% else %} bg-light text-dark {% endif %}">
+            {{ delivery.status }}
+        </span><br>
+
+        {% if delivery.status == 'Delivered' and not delivery.get('feedback') %}
+            <a class="btn btn-sm btn-outline-primary mt-2" href="{{ url_for('submit_feedback', delivery_id=delivery.id) }}">Give Feedback</a>
+        {% elif delivery.get('feedback') %}
+            <p class="mt-2 mb-0">Rated: {{ delivery.feedback.rating }} / 5</p>
+            <small class="text-muted">"{{ delivery.feedback.comment }}"</small>
+        {% endif %}
+
+        <p class="mt-2"><strong>Pickup:</strong> {{ delivery.pickup_address }}<br>
+        <strong>Dropoff:</strong> {{ delivery.dropoff_address }}</p>
+    </li>
+{% endfor %}
+</ul>
+{% else %}
+<p class="text-muted">You have not created any deliveries yet.</p>
+{% endif %}
+
+{% endblock %}

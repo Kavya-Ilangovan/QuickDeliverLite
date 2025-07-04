@@ -57,6 +57,35 @@
             {% endif %}
         </div>
         
+    
+        
+        <h3>Assigned Deliveries</h3>
+        <ul class="list-group">
+        {% for delivery in assigned_deliveries %}
+            <li class="list-group-item">
+                <strong>ID:</strong> {{ delivery.id }}<br>
+                <strong>Status:</strong>
+                <span class="badge
+                    {% if delivery.status == 'Accepted' %} bg-secondary
+                    {% elif delivery.status == 'In Transit' %} bg-warning text-dark
+                    {% elif delivery.status == 'Delivered' %} bg-success
+                    {% else %} bg-light text-dark {% endif %}">
+                    {{ delivery.status }}
+                </span><br>
+        
+                {% if delivery.status == 'Accepted' %}
+                    <a class="btn btn-sm btn-primary mt-2" href="{{ url_for('mark_in_transit', delivery_id=delivery.id) }}">
+                        Mark In Transit
+                    </a>
+                {% elif delivery.status == 'In Transit' %}
+                    <a class="btn btn-sm btn-success mt-2" href="{{ url_for('complete_delivery', delivery_id=delivery.id) }}">
+                        Mark Delivered
+                    </a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+        
         <!-- My Assigned Deliveries -->
         <div class="mt-5">
             <h4><i class="fas fa-tasks"></i> My Assigned Deliveries</h4>
