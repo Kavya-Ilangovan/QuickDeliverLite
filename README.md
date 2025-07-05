@@ -47,5 +47,9 @@ Build a role-based logistics platform where:
 - **AI Chatbot:** Integrated using Cohere’s Command R+ model.
 - **Template Engine:** Jinja2 templates for dynamic HTML rendering.
 
+---
+
+## Presentation slides
+[QuickDeliverLite(presentation).pdf](https://github.com/user-attachments/files/21077402/QuickDeliverLite.presentation.pdf)
 
 
