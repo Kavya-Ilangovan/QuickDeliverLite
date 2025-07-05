@@ -30,5 +30,21 @@
     "password": "scrypt:32768:8:1$eEiebmGZ2yLj3uLZ$a29e44af7df30db21fd5bf2e4c8449dd7cca889ae6daeacc1053a0ce97b21fcae72de44a7e491e599d065173c9ca6ac7ed258d52fa1a022690256658a1185277",
     "user_type": "driver",
     "created_at": "2025-07-05T04:34:55.014332"
+  },
+  "cc@gmail.com": {
+    "created_at": "2025-07-05T16:12:08.037508",
+    "email": "cc@gmail.com",
+    "id": "1e56193c-ac3d-4793-a7cb-4fa69578576d",
+    "name": "cc",
+    "password": "scrypt:32768:8:1$NYxMtBiynqa5s00w$98c8a4aa4b25ddd2cbd057129a7d9a75cfe2082d7b7f11516a30d1e9f184690b7bf79c400e6378297577ca1c883eb30268f762cce1998e2eae62d0ecbee23ba7",
+    "user_type": "customer"
+  },
+  "dd@gmail.com": {
+    "created_at": "2025-07-05T16:17:59.872177",
+    "email": "dd@gmail.com",
+    "id": "8003715b-63f0-43c0-9b3c-e077590444a4",
+    "name": "dd",
+    "password": "scrypt:32768:8:1$7dno6jFpurRFkZET$4f029da02cb841873a306bae730efc9e4e9722e772ccba48358a57bf2579c9474c92a51216d59c905e7cda60f60c3724d728f19ee568917ce7adbd4fbd005149",
+    "user_type": "driver"
   }
 }

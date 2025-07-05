@@ -1,4 +1,3 @@
-<!-- templates/driver_dashboard.html -->
 {% extends "base.html" %}
 
 {% block title %}Driver Dashboard - QuickDeliver Lite{% endblock %}
@@ -7,7 +6,7 @@
 <div class="row">
     <div class="col-12">
         <h2><i class="fas fa-car"></i> Driver Dashboard</h2>
-        
+
         <!-- Available Deliveries -->
         <div class="mt-4">
             <h4><i class="fas fa-clock"></i> Available Deliveries</h4>
@@ -25,26 +24,31 @@
                                     <i class="fas fa-user"></i> {{ delivery.customer_name }}
                                 </h6>
                                 <p class="card-text">
-                                    <i class="fas fa-map-marker-alt text-success"></i> 
-                                    <strong>From:</strong> {{ delivery.pickup_address[:25] }}...
+                                    <i class="fas fa-map-marker-alt text-success"></i>
+                                    <strong>From:</strong> {{ delivery.pickup_address[:25] }}{% if delivery.pickup_address|length > 25 %}...{% endif %}
                                 </p>
                                 <p class="card-text">
-                                    <i class="fas fa-flag-checkered text-danger"></i> 
-                                    <strong>To:</strong> {{ delivery.dropoff_address[:25] }}...
+                                    <i class="fas fa-flag-checkered text-danger"></i>
+                                    <strong>To:</strong> {{ delivery.dropoff_address[:25] }}{% if delivery.dropoff_address|length > 25 %}...{% endif %}
                                 </p>
                                 <p class="card-text">
-                                    <small><strong>Package:</strong> {{ delivery.package_note[:30] }}...</small>
+                                    <small><strong>Package:</strong> {{ delivery.package_note[:30] }}{% if delivery.package_note|length > 30 %}...{% endif %}</small>
                                 </p>
                             </div>
-                            <div class="card-footer">
-                                <a href="{{ url_for('accept_delivery', delivery_id=delivery.id) }}" 
-                                   class="btn btn-success btn-sm me-2"
-                                   onclick="return confirm('Accept this delivery?')">
-                                    <i class="fas fa-check"></i> Accept
-                                </a>
-                                <a href="{{ url_for('delivery_details', delivery_id=delivery.id) }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Details
-                                </a>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a href="{{ url_for('accept_delivery', delivery_id=delivery.id) }}"
+                                       class="btn btn-success btn-sm flex-fill"
+                                       onclick="return confirm('Accept this delivery?')"
+                                       style="position: relative; z-index: 10;">
+                                        <i class="fas fa-check"></i> Accept
+                                    </a>
+                                    <a href="{{ url_for('delivery_details', delivery_id=delivery.id) }}" 
+                                       class="btn btn-outline-primary btn-sm flex-fill"
+                                       style="position: relative; z-index: 10;">
+                                        <i class="fas fa-eye"></i> Details
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -56,37 +60,8 @@
                 </div>
             {% endif %}
         </div>
-        
-    
-        
-        <h3>Assigned Deliveries</h3>
-        <ul class="list-group">
-        {% for delivery in assigned_deliveries %}
-            <li class="list-group-item">
-                <strong>ID:</strong> {{ delivery.id }}<br>
-                <strong>Status:</strong>
-                <span class="badge
-                    {% if delivery.status == 'Accepted' %} bg-secondary
-                    {% elif delivery.status == 'In Transit' %} bg-warning text-dark
-                    {% elif delivery.status == 'Delivered' %} bg-success
-                    {% else %} bg-light text-dark {% endif %}">
-                    {{ delivery.status }}
-                </span><br>
-        
-                {% if delivery.status == 'Accepted' %}
-                    <a class="btn btn-sm btn-primary mt-2" href="{{ url_for('mark_in_transit', delivery_id=delivery.id) }}">
-                        Mark In Transit
-                    </a>
-                {% elif delivery.status == 'In Transit' %}
-                    <a class="btn btn-sm btn-success mt-2" href="{{ url_for('complete_delivery', delivery_id=delivery.id) }}">
-                        Mark Delivered
-                    </a>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-        
-        <!-- My Assigned Deliveries -->
+
+        <!-- Assigned Deliveries -->
         <div class="mt-5">
             <h4><i class="fas fa-tasks"></i> My Assigned Deliveries</h4>
             {% if assigned_deliveries %}
@@ -96,37 +71,52 @@
                         <div class="card delivery-card h-100">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <small class="text-muted">{{ delivery.created_at[:10] }}</small>
-                                <span class="badge bg-{{ 'info' if delivery.status == 'Accepted' else 'success' }} status-badge">
-                                    {{ delivery.status }}
-                                </span>
+                                {% if delivery.status == 'Accepted' %}
+                                    <span class="badge bg-info">{{ delivery.status }}</span>
+                                {% elif delivery.status == 'In Transit' %}
+                                    <span class="badge bg-warning">{{ delivery.status }}</span>
+                                {% else %}
+                                    <span class="badge bg-success">{{ delivery.status }}</span>
+                                {% endif %}
                             </div>
                             <div class="card-body">
                                 <h6 class="card-title">
                                     <i class="fas fa-user"></i> {{ delivery.customer_name }}
                                 </h6>
                                 <p class="card-text">
-                                    <i class="fas fa-map-marker-alt text-success"></i> 
-                                    <strong>From:</strong> {{ delivery.pickup_address[:25] }}...
+                                    <i class="fas fa-map-marker-alt text-success"></i>
+                                    <strong>From:</strong> {{ delivery.pickup_address[:25] }}{% if delivery.pickup_address|length > 25 %}...{% endif %}
                                 </p>
                                 <p class="card-text">
-                                    <i class="fas fa-flag-checkered text-danger"></i> 
-                                    <strong>To:</strong> {{ delivery.dropoff_address[:25] }}...
+                                    <i class="fas fa-flag-checkered text-danger"></i>
+                                    <strong>To:</strong> {{ delivery.dropoff_address[:25] }}{% if delivery.dropoff_address|length > 25 %}...{% endif %}
                                 </p>
                                 <p class="card-text">
-                                    <small><strong>Package:</strong> {{ delivery.package_note[:30] }}...</small>
+                                    <small><strong>Package:</strong> {{ delivery.package_note[:30] }}{% if delivery.package_note|length > 30 %}...{% endif %}</small>
                                 </p>
                             </div>
-                            <div class="card-footer">
-                                {% if delivery.status == 'Accepted' %}
-                                <a href="{{ url_for('complete_delivery', delivery_id=delivery.id) }}" 
-                                   class="btn btn-success btn-sm me-2"
-                                   onclick="return confirm('Mark this delivery as completed?')">
-                                    <i class="fas fa-check-circle"></i> Complete
-                                </a>
-                                {% endif %}
-                                <a href="{{ url_for('delivery_details', delivery_id=delivery.id) }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fas fa-eye"></i> Details
-                                </a>
+                            <div class="card-footer bg-transparent">
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% if delivery.status == 'Accepted' %}
+                                        <a href="{{ url_for('mark_in_transit', delivery_id=delivery.id) }}"
+                                           class="btn btn-primary btn-sm flex-fill"
+                                           style="position: relative; z-index: 10;">
+                                            <i class="fas fa-truck"></i> Start Delivery
+                                        </a>
+                                    {% elif delivery.status == 'In Transit' %}
+                                        <a href="{{ url_for('complete_delivery', delivery_id=delivery.id) }}"
+                                           class="btn btn-success btn-sm flex-fill"
+                                           onclick="return confirm('Mark this delivery as delivered?')"
+                                           style="position: relative; z-index: 10;">
+                                            <i class="fas fa-check-circle"></i> Complete
+                                        </a>
+                                    {% endif %}
+                                    <a href="{{ url_for('delivery_details', delivery_id=delivery.id) }}" 
+                                       class="btn btn-outline-primary btn-sm flex-fill"
+                                       style="position: relative; z-index: 10;">
+                                        <i class="fas fa-eye"></i> Details
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -140,4 +130,98 @@
         </div>
     </div>
 </div>
+
+<!-- Additional CSS to ensure buttons work properly -->
+<style>
+.delivery-card {
+    transition: transform 0.2s ease-in-out;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.delivery-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.delivery-card .card-footer {
+    padding: 0.75rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.delivery-card .card-footer .btn {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+}
+
+.delivery-card .card-footer .btn:hover {
+    transform: none !important;
+}
+
+/* Ensure buttons are clickable */
+.card-footer a.btn {
+    position: relative;
+    z-index: 999;
+    display: inline-block;
+    pointer-events: auto;
+}
+
+/* Remove any overlay that might be blocking clicks */
+.delivery-card::before,
+.delivery-card::after {
+    display: none !important;
+}
+
+/* Ensure card doesn't capture clicks meant for buttons */
+.delivery-card {
+    pointer-events: auto;
+}
+
+.delivery-card * {
+    pointer-events: auto;
+}
+</style>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Additional JavaScript to ensure buttons work
+document.addEventListener('DOMContentLoaded', function() {
+    // Remove any event listeners that might be interfering
+    const buttons = document.querySelectorAll('.delivery-card .btn');
+    buttons.forEach(button => {
+        button.style.pointerEvents = 'auto';
+        button.style.cursor = 'pointer';
+        
+        // Add click event listener as backup
+        button.addEventListener('click', function(e) {
+            // Ensure the click goes through
+            e.stopPropagation();
+            
+            // For confirmation dialogs
+            if (this.hasAttribute('onclick')) {
+                const onclickCode = this.getAttribute('onclick');
+                if (onclickCode.includes('confirm')) {
+                    // Let the onclick handle it
+                    return;
+                }
+            }
+            
+            // For regular links, navigate
+            if (this.href) {
+                window.location.href = this.href;
+            }
+        });
+    });
+    
+    // Debug: Log when buttons are clicked
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            console.log('Button clicked:', this.textContent.trim());
+        });
+    });
+});
+</script>
 {% endblock %}
